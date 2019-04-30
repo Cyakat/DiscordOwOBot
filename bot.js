@@ -38,6 +38,12 @@ bot.on('message', function (user, userID, channelID, message, evt, content) {
                   to: channelID,
                   message: 'UwU'
                 });
+            break;
+            case 'deleteMe':
+                bot.delete({
+                  to: channelID,
+                    
+                })
             // Just add any case commands if you want to..
          }
      }
