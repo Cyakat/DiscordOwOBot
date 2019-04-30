@@ -1,8 +1,11 @@
 {
-“name”: “owo”,
-“version”: “1.0.0”,
-“description”: “replaces text in server with owo”,
-“main”: “bot.js”,
-“author”: “Tiko Bauer”,
-“dependencies”: {}
+  "name": "owo",
+  "version": "1.0.0",
+  "description": "replaces text in server with owo",
+  "main": "bot.js",
+  "author": "Tiko Bauer",
+  "dependencies": {
+    "discord.io": "^2.5.3",
+    "winston": "^3.2.1"
+  }
 }

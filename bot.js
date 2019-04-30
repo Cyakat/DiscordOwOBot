@@ -37,3 +37,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
          }
      }
 });
+/*bot.edit('message', function (content) {
+  //this controls the editng of a messages
+  if (message.content)
+});*/
