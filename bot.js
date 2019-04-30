@@ -17,7 +17,7 @@ bot.on('ready', function (evt) {
     logger.info('Logged in as: ');
     logger.info(bot.username + ' - (' + bot.id + ')');
 });
-bot.on('message', function (user, userID, channelID, message, evt) {
+bot.on('message', function (user, userID, channelID, message, evt, content) {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
     if (message.substring(0, 1) == '!') {
@@ -33,11 +33,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: 'Pong!'
                 });
             break;
+            case 'owo':
+                bot.sendMessage({
+                  to: channelID,
+                  message: 'UwU'
+                });
             // Just add any case commands if you want to..
          }
      }
 });
-/*bot.edit('message', function (content) {
-  //this controls the editng of a messages
-  if (message.content)
-});*/
