@@ -6,9 +6,24 @@ bot.on('ready', () => {
 });
 
 bot.on('message', msg => {
-  if (msg.content === 'ping') {
-    msg.reply('pong');
+
+  var user = msg.author.id;
+  console.log(user);
+  var args = msg.content;
+  if (user !== '572633339039580172') {
+    msg.delete();
   }
+  if (user !== '572633339039580172') {
+    var msgStr = msg.content;
+    //msgStr = args.substr(1, (args.length-1));
+    msgStr = msgStr.replace(/r/g,"w");
+    msgStr = msgStr.replace(/l/g,"w");
+    msgStr = msgStr.replace(/na/g,"nya");
+    msgStr = msgStr.replace(/oo/g,"uwu");
+    console.log(msgStr);
+    msg.reply(msgStr);
+  }
+
 });
 
-bot.login('token');
+bot.login('NTcyNjMzMzM5MDM5NTgwMTcy.XMjXSQ.OgNb7ZUrIpdT3fTU-hgykZWch5Y');
