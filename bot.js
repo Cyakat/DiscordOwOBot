@@ -1,5 +1,7 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
+const embed = new Discord.RichEmbed();
+const fs = require('fs');
 var aryChannelIDs = [];
 var aryWhitelist = ['249382933054357504', '250408653830619137','1337'];
 var indexChan = 0;
@@ -35,6 +37,10 @@ bot.on('message', msg => {
       case 'uwu':
         removeChannel(user, channelID, msg, aryChannelIDs, aryWhitelist)
         break;
+      case 'link':
+        sendLink(fs, msg)
+        break;
+
     }
     args2 = cmd.split(' ');
     if (args2[0] === 'add' && args2[1] === 'user') {
@@ -54,20 +60,6 @@ bot.on('message', msg => {
       userID = args2[2];
       removeUser(user, userID, msg, aryWhitelist);
     }
-    /*args2 = cmd.split(' ');
-    args2 = args2.replace(/<@!/g, '');
-    args2 = args2.replace(/>/g, '');
-
-      switch (args2) {
-        case 'add user':
-          var userID = args2[2];
-          addUser(userID, msg);
-          break;
-        case 'remove user':
-          var userID = args2[2];
-          removeUser(userID, msg);
-          break;
-      }*/
 
   }
   for (i; i<aryChannelIDs.length; i++) {
@@ -75,20 +67,6 @@ bot.on('message', msg => {
       owo(user, msg, channelID, aryChannelIDs[i]);
     }
 }
-/*
-  if (owoMode == true) {
-    if (user === '249382933054357504' || user === '250408653830619137' || user === '386434363241529354') {
-      if (msg.content === 'uwu stop') {
-        console.log('owo mode deactivated');
-        channel.send('owo mode deactivated');
-        owoMode = false;
-      }
-    }
-  }
-*/
-//  if (owoMode == true) {
-
-//  }
 
 //just sends the message sent in the console
   if (user !== '572633339039580172' || user !== '155149108183695360'){
@@ -97,8 +75,12 @@ bot.on('message', msg => {
   }
 });
 
+fs.readFile('botToken.txt', (err, data) => {
+  if (err) throw err;
 
-bot.login('NTcyNjMzMzM5MDM5NTgwMTcy.XMjXSQ.OgNb7ZUrIpdT3fTU-hgykZWch5Y');
+  console.log(data.toString());
+});
+bot.login(data);
 
 
 
@@ -134,12 +116,6 @@ function owo(user, msg, channelID, chanID) {
     }
   }
 }
-//just returns everything in a list
-/*function list(listName) {
-  for (var i = 0; i<listName.length; i++) {
-    return listName[i];
-  }
-} */
 
 //function for adding channels to the aryWhitelist
 function addChannel(user, chanID, msg, aryWhitelist) {
@@ -235,4 +211,13 @@ function removeUser(user, userID, msg, aryWhitelist) {
   } else {
     msg.channel.send('YOU CANNOT REMOVE MASTER ÒwÓ!');
   }
+}
+
+function sendLink(fs, msg) {
+  fs.readFile('link.embed', (err, data) => {
+    if (err) throw err;
+
+    console.log(data);
+  });
+  msg.channel.send(data);
 }
