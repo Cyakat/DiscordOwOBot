@@ -1,10 +1,12 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 var aryChannelIDs = [];
-var aryWhitelist = ['249382933054357504', '1337'];
+var aryWhitelist = ['249382933054357504', '250408653830619137','1337'];
 var indexChan = 0;
-var indexWhite = 1;
+var indexWhite = 2;
 var prefix = '!';
+var masterID = '249382933054357504';
+var louieID = '250408653830619137';
 //'572664220324200448'
 
 
@@ -199,30 +201,38 @@ function addUser(user, userID, msg, aryWhitelist) {
 }
 
 function removeUser(user, userID, msg, aryWhitelist) {
-  var loopComplete = false;
-  for (i = 0; i < aryWhitelist.length; i++) {
-    if (userID === aryWhitelist[i]) {
-      loopComplete = true;
-      if (user !== userID ) {
-        for (i = 0; i < aryWhitelist.length; i++) {
-          if (user === aryWhitelist[i]) {
-            for( i = 0; i < aryWhitelist.length; i++) {
-              if (userID === aryWhitelist[i]) {
-                aryWhitelist[i] = ' ';
-                //indexWhite = indexWhite - 1;
-                msg.channel.send('oof I guess ' + '<@' + userID + '>' + ' is no longer cool ;w;');
-                console.log(`removed a person ${userID}`);
+  if (userID !== masterID){
+    if (userID !== louieID){
+      var loopComplete = false;
+      for (i = 0; i < aryWhitelist.length; i++) {
+        if (userID === aryWhitelist[i]) {
+          loopComplete = true;
+          if (user !== userID ) {
+            for (i = 0; i < aryWhitelist.length; i++) {
+              if (user === aryWhitelist[i]) {
+                for( i = 0; i < aryWhitelist.length; i++) {
+                  if (userID === aryWhitelist[i]) {
+                    aryWhitelist[i] = ' ';
+                    //indexWhite = indexWhite - 1;
+                    msg.channel.send('oof I guess ' + '<@' + userID + '>' + ' is no longer cool ;w;');
+                    console.log(`removed a person ${userID}`);
+                  }
+                }
               }
             }
+          } else {
+            msg.channel.send("You wouldn't want to remove your self would you OwO");
           }
         }
-      } else {
-        msg.channel.send("You wouldn't want to remove your self would you OwO");
       }
+      if (i === aryWhitelist.length && loopComplete !== true) {
+        console.log('user was already removed');
+        msg.channel.send('The user is already gone you baka! (。-∀-)');
+      }
+    } else {
+      msg.channel.send('YOU CANNOT REMOVE LOUIE-CHAN ÒwÓ!');
     }
-  }
-  if (i === aryWhitelist.length && loopComplete !== true) {
-    console.log('user was already removed');
-    msg.channel.send('The user is already gone you baka! (。-∀-)');
+  } else {
+    msg.channel.send('YOU CANNOT REMOVE MASTER ÒwÓ!');
   }
 }
