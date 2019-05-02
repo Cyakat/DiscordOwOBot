@@ -1,19 +1,20 @@
 const Discord = require('discord.js');
 const bot = new Discord.Client();
-const embed = new Discord.RichEmbed();
+//const embed = new Discord.RichEmbed();
 const fs = require('fs');
 var aryChannelIDs = [];
-var aryWhitelist = ['249382933054357504', '250408653830619137','1337'];
+var aryWhitelist = [];
+//'249382933054357504', '250408653830619137','1337'
 var indexChan = 0;
 var indexWhite = 2;
 var prefix = '!';
 var masterID = '249382933054357504';
 var louieID = '250408653830619137';
-//'572664220324200448'
 
 
 bot.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
+
 });
 bot.on('message', msg => {
 
@@ -23,10 +24,11 @@ bot.on('message', msg => {
   var username = msg.author.username;
   var channelID = msg.channel.id;
   var userID;
-
-  console.log(channelID)
-
   var args = msg.content;
+
+  console.log(aryWhitelist);
+  readWhitelist();
+  console.log(aryWhitelist)
 
   if (args[0] === prefix) {
     cmd = args.substr(1, args.length-1);
@@ -79,8 +81,11 @@ fs.readFile('botToken.txt', (err, data) => {
   if (err) throw err;
 
   console.log(data.toString());
+  data = data.toString();
+  data = data.replace(/\n/g, '');
+  bot.login(data);
 });
-bot.login(data);
+
 
 
 
@@ -118,10 +123,11 @@ function owo(user, msg, channelID, chanID) {
 }
 
 //function for adding channels to the aryWhitelist
-function addChannel(user, chanID, msg, aryWhitelist) {
+function addChannel(user, chanID, msg, aryWhitelist, aryChannelIDs) {
   for (i = 0; i < aryWhitelist.length; i++) {
     if (user === aryWhitelist[i]) {
       aryChannelIDs[indexChan] = chanID;
+      writeChannelIDs(fs, aryChannelIDs);
       indexChan = indexChan + 1;
       msg.channel.send('IT HAS BEGUN')
       console.log(`added channel ${chanID}`);
@@ -135,6 +141,7 @@ function removeChannel(user, chanID, msg, aryChannelIDs, aryWhitelist) {
       for (i = 0; i < aryChannelIDs.length; i++) {
         if (chanID === aryChannelIDs[i]) {
           aryChannelIDs[i] = '';
+          writeChannelIDs(fs, aryChannelIDs);
           msg.channel.send("Y'ALL HAVE BEEN REMOVED FROM SLAVERY!");
           console.log(`removed channel ${chanID}`);
         }
@@ -165,6 +172,9 @@ function addUser(user, userID, msg, aryWhitelist) {
       for (i = 0; i < aryWhitelist.length; i++) {    // if (aryWhitelist[i] <= aryWhitelist.length)
         if (user === aryWhitelist[i]) {
           aryWhitelist[indexWhite] = userID;
+
+          writeWhitelist();
+
           aryWhitelist [indexWhite + 1] = '1337';
           indexWhite = indexWhite + 1;
           msg.channel.send('Added user ' + '<@' + userID + '>' + ' OwO!');
@@ -188,7 +198,10 @@ function removeUser(user, userID, msg, aryWhitelist) {
               if (user === aryWhitelist[i]) {
                 for( i = 0; i < aryWhitelist.length; i++) {
                   if (userID === aryWhitelist[i]) {
-                    aryWhitelist[i] = ' ';
+                    aryWhitelist[i] = '';
+
+                    writeWhitelist();
+
                     //indexWhite = indexWhite - 1;
                     msg.channel.send('oof I guess ' + '<@' + userID + '>' + ' is no longer cool ;w;');
                     console.log(`removed a person ${userID}`);
@@ -214,10 +227,62 @@ function removeUser(user, userID, msg, aryWhitelist) {
 }
 
 function sendLink(fs, msg) {
+
   fs.readFile('link.embed', (err, data) => {
     if (err) throw err;
 
     console.log(data);
+    const embed = new Discord.RichEmbed(data);
   });
-  msg.channel.send(data);
+}
+
+
+
+function readWhitelist(){
+  fs.readFile('Whitelist.txt' , (err,data) =>{
+  if (err) throw err;
+
+  data = data.toString();
+  aryWhitelist = data.split(',');
+
+  console.log('Whitelist Loaded');
+  console.log(aryWhitelist);
+  return aryWhitelist;
+
+  });
+}
+
+function writeWhitelist() {
+  fs.writeFile('Whitelist.txt' , aryWhitelist, (err) => {
+      if(err) throw err;
+
+      console.log('whitelist written');
+      console.log(aryWhitelist);
+      readWhitelist();
+      indexWhite = aryWhitelist.length-1;
+  });
+  return aryWhitelist, indexWhite;
+}
+
+function readChannelIDs(fs, aryChannelIDs){
+  fs.readFile('ChannelIDs.txt' , (err,data) => {
+  if (err) throw err;
+
+  data = data.toString();
+  aryChannelIDs = data.split(',');
+
+  console.log('Channels Loaded');
+  console.log(aryChannelIDs);
+  return;
+
+  });
+}
+
+function writeChannelIDs(fs, aryChannelIDs) {
+  fs.writeFile('ChannelIDs.txt' , aryChannelIDs, (err) => {
+      if(err) throw err;
+      console.log(aryChannelIDs);
+      readChannelIDs(fs, aryChannelIDs);
+      indexChan = aryChannelIDs.length-1;
+  });
 }
