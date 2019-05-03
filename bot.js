@@ -16,6 +16,8 @@ bot.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 
 });
+readWhitelist();
+readChannelIDs();
 bot.on('message', msg => {
 
   var channel = msg.channel;
@@ -34,7 +36,7 @@ bot.on('message', msg => {
     cmd = args.substr(1, args.length-1);
     switch (cmd) {
       case 'owo':
-        addChannel(user, channelID, msg, aryWhitelist)
+        addChannel(user, channelID, msg, aryWhitelist, aryChannelIDs)
         break;
       case 'uwu':
         removeChannel(user, channelID, msg, aryChannelIDs, aryWhitelist)
@@ -77,7 +79,7 @@ bot.on('message', msg => {
   }
 });
 
-fs.readFile('botToken.txt', (err, data) => {
+fs.readFile('../botToken.txt', (err, data) => {
   if (err) throw err;
 
   console.log(data.toString());
@@ -127,7 +129,7 @@ function addChannel(user, chanID, msg, aryWhitelist, aryChannelIDs) {
   for (i = 0; i < aryWhitelist.length; i++) {
     if (user === aryWhitelist[i]) {
       aryChannelIDs[indexChan] = chanID;
-      writeChannelIDs(fs, aryChannelIDs);
+      writeChannelIDs();
       indexChan = indexChan + 1;
       msg.channel.send('IT HAS BEGUN')
       console.log(`added channel ${chanID}`);
@@ -141,7 +143,7 @@ function removeChannel(user, chanID, msg, aryChannelIDs, aryWhitelist) {
       for (i = 0; i < aryChannelIDs.length; i++) {
         if (chanID === aryChannelIDs[i]) {
           aryChannelIDs[i] = '';
-          writeChannelIDs(fs, aryChannelIDs);
+          writeChannelIDs();
           msg.channel.send("Y'ALL HAVE BEEN REMOVED FROM SLAVERY!");
           console.log(`removed channel ${chanID}`);
         }
@@ -264,7 +266,7 @@ function writeWhitelist() {
   return aryWhitelist, indexWhite;
 }
 
-function readChannelIDs(fs, aryChannelIDs){
+function readChannelIDs(){
   fs.readFile('ChannelIDs.txt' , (err,data) => {
   if (err) throw err;
 
@@ -273,16 +275,16 @@ function readChannelIDs(fs, aryChannelIDs){
 
   console.log('Channels Loaded');
   console.log(aryChannelIDs);
-  return;
+  return aryChannelIDs;
 
   });
 }
 
-function writeChannelIDs(fs, aryChannelIDs) {
+function writeChannelIDs() {
   fs.writeFile('ChannelIDs.txt' , aryChannelIDs, (err) => {
       if(err) throw err;
       console.log(aryChannelIDs);
-      readChannelIDs(fs, aryChannelIDs);
+      readChannelIDs();
       indexChan = aryChannelIDs.length-1;
   });
 }
