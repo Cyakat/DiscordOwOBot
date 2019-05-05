@@ -5,8 +5,8 @@ const fs = require('fs');
 var aryChannelIDs = [];
 var aryWhitelist = [];
 //'249382933054357504', '250408653830619137','1337'
-var indexChan = 0;
-var indexWhite = 2;
+var indexChan;
+var indexWhite;
 var prefix = '!';
 var masterID = '249382933054357504';
 var louieID = '250408653830619137';
@@ -18,6 +18,8 @@ bot.on('ready', () => {
 });
 readWhitelist();
 readChannelIDs();
+indexChan = aryChannelIDs-1;
+indexWhite = aryWhitelist-1;
 bot.on('message', msg => {
 
   var channel = msg.channel;
