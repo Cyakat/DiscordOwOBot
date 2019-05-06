@@ -18,8 +18,8 @@ bot.on('ready', () => {
 });
 readWhitelist();
 readChannelIDs();
-indexChan = aryChannelIDs.length-1;
-indexWhite = aryWhitelist.length-1;
+indexChan = aryChannelIDs.length;
+indexWhite = aryWhitelist.length;
 bot.on('message', msg => {
 
   var channel = msg.channel;
@@ -286,6 +286,7 @@ function readChannelIDs(){
 function writeChannelIDs() {
   fs.writeFile('ChannelIDs.txt' , aryChannelIDs, (err) => {
       if(err) throw err;
+      console.log('Channels Written')
       console.log(aryChannelIDs);
       readChannelIDs();
       indexChan = aryChannelIDs.length-1;
