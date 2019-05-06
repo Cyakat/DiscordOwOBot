@@ -18,8 +18,8 @@ bot.on('ready', () => {
 });
 readWhitelist();
 readChannelIDs();
-indexChan = aryChannelIDs-1;
-indexWhite = aryWhitelist-1;
+indexChan = aryChannelIDs.length-1;
+indexWhite = aryWhitelist.length-1;
 bot.on('message', msg => {
 
   var channel = msg.channel;
@@ -44,7 +44,7 @@ bot.on('message', msg => {
         removeChannel(user, channelID, msg, aryChannelIDs, aryWhitelist)
         break;
       case 'link':
-        sendLink(fs, msg)
+        sendLink(msg)
         break;
 
     }
@@ -230,14 +230,15 @@ function removeUser(user, userID, msg, aryWhitelist) {
   }
 }
 
-function sendLink(fs, msg) {
+function sendLink(msg) {
 
-  fs.readFile('link.embed', (err, data) => {
-    if (err) throw err;
+  msg.channel.send('You can invite me with this link! https://discordapp.com/oauth2/authorize?&client_id=572633339039580172&scope=bot&permissions=8');
+//  fs.readFile('link.embed', (err, data) => {
+//    if (err) throw err;
 
-    console.log(data);
-    const embed = new Discord.RichEmbed(data);
-  });
+//    console.log(data);
+//    const embed = new Discord.RichEmbed(data);
+  //});
 }
 
 
