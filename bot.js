@@ -83,8 +83,6 @@ bot.on('message', msg => {
 
 fs.readFile('../botToken.txt', (err, data) => {
   if (err) throw err;
-
-  console.log(data.toString());
   data = data.toString();
   data = data.replace(/\n/g, '');
   bot.login(data);
