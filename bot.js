@@ -230,7 +230,7 @@ function removeUser(user, userID, msg, aryWhitelist) {
 
 function sendLink(msg) {
 
-  msg.channel.send('You can invite me with this link! https://discordapp.com/oauth2/authorize?client_id=572633339039580172&permissions=82967680&scope=bot');
+  msg.channel.send('You can invite me with this link! https://discordapp.com/oauth2/authorize?client_id=572633339039580172&permissions=67464256&scope=bot');
 //  fs.readFile('link.embed', (err, data) => {
 //    if (err) throw err;
 
