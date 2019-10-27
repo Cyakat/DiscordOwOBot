@@ -157,7 +157,7 @@ function removeChannel(user, chanID, msg, aryChannelIDs, aryWhitelist) {
           if (chanID === aryChannelIDs[i]) {
             aryChannelIDs[i] = '';
             writeChannelIDs();
-            msg.channel.send("Y'ALL HAVE BEEN REMOVED FROM SLAVERY!");
+            msg.channel.send("Y'ALL HAVE BEEN WEMOVED FROM SWAVEWY!");
             console.log(`removed channel ${chanID}`);
             channelRemoved = true;
             console.log(channelRemoved)
@@ -184,11 +184,11 @@ function addUser(user, userID, msg, aryWhitelist) {
    // msg.channel.send(i);
     if (userID === aryWhitelist[i]){ /*aryWhitelist[i]*/ /*&& aryWhitelist[i] === '1337'){ /*|| userID === aryWhitelist[i-1]){*/ //&& aryWhitelist[i] === aryWhitelist[aryWhitelist.length-1]) {
       if (user === userID) {
-        msg.channel.send("You can't add your self dummy!");
+        msg.channel.send("You can't add youw self dummy!");
         return;
       } else {
         console.log('user already added');
-        msg.channel.send('User already added siwwy UwU');
+        msg.channel.send('Usew awweady added siwwy UwU');
         return;
       }
     }
@@ -204,7 +204,7 @@ function addUser(user, userID, msg, aryWhitelist) {
 
           aryWhitelist [indexWhite + 1] = '1337';
           indexWhite = indexWhite + 1;
-          msg.channel.send('Added user ' + '<@' + userID + '>' + ' OwO!');
+          msg.channel.send('Added usew ' + '<@' + userID + '>' + ' OwO!');
           console.log(`added a user ${userID}`);
           return;
         }
@@ -230,20 +230,20 @@ function removeUser(user, userID, msg, aryWhitelist) {
                     writeWhitelist();
 
                     //indexWhite = indexWhite - 1;
-                    msg.channel.send('oof I guess ' + '<@' + userID + '>' + ' is no longer cool ;w;');
+                    msg.channel.send('UwUf I guess ' + '<@' + userID + '>' + ' is no wonger coow ;w;');
                     console.log(`removed a person ${userID}`);
                   }
                 }
               }
             }
           } else {
-            msg.channel.send("You wouldn't want to remove your self would you OwO");
+            msg.channel.send("You wouldn't want to wemove youw self would you OwO");
           }
         }
       }
       if (i === aryWhitelist.length && loopComplete !== true) {
         console.log('user was already removed');
-        msg.channel.send('The user is already gone you baka! (。-∀-)');
+        msg.channel.send('The usew is alweady gone you baka! (。-∀-)');
       }
     } else {
       msg.channel.send('YOU CANNOT REMOVE LOUIE-CHAN ÒwÓ!');
@@ -255,7 +255,7 @@ function removeUser(user, userID, msg, aryWhitelist) {
 
 function sendLink(msg) {
 
-  msg.channel.send('You can invite me with this link! https://discordapp.com/oauth2/authorize?client_id=572633339039580172&permissions=67464256&scope=bot');
+  msg.channel.send('You can invite me with this wink! https://discordapp.com/oauth2/authorize?client_id=572633339039580172&permissions=67464256&scope=bot');
 //  fs.readFile('link.embed', (err, data) => {
 //    if (err) throw err;
 
@@ -270,12 +270,12 @@ function checkForChannel(aryChannelIDs, chanID, msg)
   var channelExists = true;
   if (aryChannelIDs.length === 0)
   {
-    msg.channel.send("There aren't even any servers whitelisted retard");
+    msg.channel.send("There awen't even any sewverw whitewisted wetawd UwU");
     console.log('no whitelisted channels');
   }
   else
   {
-    console.log('thers is at least one channel');
+    console.log('theres is at least one channel');
     for (i = 0; i<=aryChannelIDs.length-1; i++)
     {
       //console.log(i);
@@ -292,7 +292,7 @@ function checkForChannel(aryChannelIDs, chanID, msg)
   if (channelInstances < 1)
   {
     channelExists = false;
-    msg.channel.send("You can't stop whats not there silly");
+    msg.channel.send("You can't stop whats nyot there siwwy");
   }
   return channelExists;
 }
