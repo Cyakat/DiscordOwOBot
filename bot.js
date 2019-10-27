@@ -1,5 +1,9 @@
 const Discord = require('discord.js');
-const bot = new Discord.Client();
+var auth = require('../auth.json');
+const bot = new Discord.Client({
+   token: auth.token,
+   autorun: true
+ });
 //const embed = new Discord.RichEmbed();
 const fs = require('fs');
 var aryChannelIDs = [];
@@ -10,6 +14,9 @@ var indexWhite;
 var prefix = '!';
 var masterID = '249382933054357504';
 var louieID = '250408653830619137';
+
+bot.login(auth.token);
+
 
 
 bot.on('ready', () => {
@@ -29,6 +36,7 @@ bot.on('message', msg => {
   var channelID = msg.channel.id;
   var userID;
   var args = msg.content;
+  var channelRemoved = false;
 
   console.log(aryWhitelist);
   readWhitelist();
@@ -80,13 +88,14 @@ bot.on('message', msg => {
     console.log(msg.content);
   }
 });
-
+/*
 fs.readFile('../botToken.txt', (err, data) => {
   if (err) throw err;
   data = data.toString();
   data = data.replace(/\n/g, '');
   bot.login(data);
 });
+*/
 
 
 
@@ -138,15 +147,31 @@ function addChannel(user, chanID, msg, aryWhitelist, aryChannelIDs) {
 }
 
 function removeChannel(user, chanID, msg, aryChannelIDs, aryWhitelist) {
-  for (i = 0; i < aryWhitelist.length; i++) {
-    if (user === aryWhitelist[i]) {
-      for (i = 0; i < aryChannelIDs.length; i++) {
-        if (chanID === aryChannelIDs[i]) {
-          aryChannelIDs[i] = '';
-          writeChannelIDs();
-          msg.channel.send("Y'ALL HAVE BEEN REMOVED FROM SLAVERY!");
-          console.log(`removed channel ${chanID}`);
+  var channelRemoved = false;
+  var channelExists = checkForChannel(aryChannelIDs, chanID, msg);
+  if (channelExists === true)
+  {
+    for (i = 0; i < aryWhitelist.length; i++) {
+      if (user === aryWhitelist[i]) {
+        for (i = 0; i < aryChannelIDs.length; i++) {
+          if (chanID === aryChannelIDs[i]) {
+            aryChannelIDs[i] = '';
+            writeChannelIDs();
+            msg.channel.send("Y'ALL HAVE BEEN REMOVED FROM SLAVERY!");
+            console.log(`removed channel ${chanID}`);
+            channelRemoved = true;
+            console.log(channelRemoved)
+          }
+          //console.log('hi')
+          if (channelRemoved === true)
+          {
+            break;
+          }
         }
+      }
+      if (channelRemoved === true)
+      {
+        break;
       }
     }
   }
@@ -239,7 +264,32 @@ function sendLink(msg) {
   //});
 }
 
-
+function checkForChannel(aryChannelIDs, chanID, msg)
+{
+  var channelInstances = 0;
+  var channelExists = true;
+  if (aryChannelIDs.length === 0)
+  {
+    msg.channel.send("There aren't even any servers whitelisted retard")
+    channelInstances = channelInstances + 1;
+  }
+  else
+  {
+    for (i = 0; i<aryChannelIDs.length-1; i++)
+    {
+      if (aryChannelIDs[i] != chanID)
+      {
+        msg.channel.send("You can't stop whats not there silly");
+        channelInstances = channelInstances + 1;
+      }
+    }
+  }
+  if (channelInstances < 1)
+  {
+    channelExists = false;
+  }
+  return channelExists;
+}
 
 function readWhitelist(){
   fs.readFile('Whitelist.txt' , (err,data) =>{
@@ -256,7 +306,7 @@ function readWhitelist(){
 }
 
 function writeWhitelist() {
-  fs.writeFile('Whitelist.txt' , aryWhitelist, (err) => {
+  fs.writeFile('Whitelist.txt' , aryWhitelist, (err,data) => {
       if(err) throw err;
 
       console.log('whitelist written');
@@ -272,6 +322,8 @@ function readChannelIDs(){
   if (err) throw err;
 
   data = data.toString();
+  data = data.replace(/\n/, '')
+  data = data.replace(/\r/, '')
   aryChannelIDs = data.split(',');
 
   console.log('Channels Loaded');
@@ -282,11 +334,12 @@ function readChannelIDs(){
 }
 
 function writeChannelIDs() {
-  fs.writeFile('ChannelIDs.txt' , aryChannelIDs, (err) => {
+  fs.writeFile('ChannelIDs.txt' , aryChannelIDs, (err,data) => {
       if(err) throw err;
       console.log('Channels Written')
       console.log(aryChannelIDs);
       readChannelIDs();
       indexChan = aryChannelIDs.length-1;
   });
+  return aryChannelIDs, indexChan;
 }
