@@ -270,23 +270,29 @@ function checkForChannel(aryChannelIDs, chanID, msg)
   var channelExists = true;
   if (aryChannelIDs.length === 0)
   {
-    msg.channel.send("There aren't even any servers whitelisted retard")
-    channelInstances = channelInstances + 1;
+    msg.channel.send("There aren't even any servers whitelisted retard");
+    console.log('no whitelisted channels');
   }
   else
   {
-    for (i = 0; i<aryChannelIDs.length-1; i++)
+    console.log('thers is at least one channel');
+    for (i = 0; i<=aryChannelIDs.length-1; i++)
     {
-      if (aryChannelIDs[i] != chanID)
+      //console.log(i);
+      if (aryChannelIDs[i] === chanID)
       {
-        msg.channel.send("You can't stop whats not there silly");
+        //console.log(aryChannelIDs[i]);
+        //console.log(chanID);
         channelInstances = channelInstances + 1;
+        //console.log(channelInstances);
+        break;
       }
     }
   }
   if (channelInstances < 1)
   {
     channelExists = false;
+    msg.channel.send("You can't stop whats not there silly");
   }
   return channelExists;
 }
