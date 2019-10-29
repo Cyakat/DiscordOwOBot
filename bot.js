@@ -1,6 +1,6 @@
-const Discord = require('discord.js');
+const Commando = require('discord.js-commando');
 var auth = require('../auth.json');
-const bot = new Discord.Client({
+const bot = new Commando.Client({
    token: auth.token,
    autorun: true
  });
@@ -14,6 +14,13 @@ var indexWhite;
 var prefix = '!';
 var masterID = '249382933054357504';
 var louieID = '250408653830619137';
+
+bot.registry.registerGroup('music', 'Music');
+bot.registry.registerGroup('owo', 'Owo');
+bot.registry.registerDefaults();
+bot.registry.registerCommandsIn(__dirname + '/commands');
+
+global.servers = {};
 
 bot.login(auth.token);
 
@@ -54,7 +61,6 @@ bot.on('message', msg => {
       case 'link':
         sendLink(msg)
         break;
-
     }
     args2 = cmd.split(' ');
     if (args2[0] === 'add' && args2[1] === 'user') {
@@ -74,7 +80,11 @@ bot.on('message', msg => {
       userID = args2[2];
       removeUser(user, userID, msg, aryWhitelist);
     }
-
+    if (args2[0] === 'stream')
+    {
+      url = args2[1];
+      fetchVideo(url);
+    }
   }
   for (i; i<aryChannelIDs.length; i++) {
     if (channelID === aryChannelIDs[i]) {
@@ -298,7 +308,7 @@ function checkForChannel(aryChannelIDs, chanID, msg)
 }
 
 function readWhitelist(){
-  fs.readFile('Whitelist.txt' , (err,data) =>{
+  fs.readFile('./text-files/Whitelist.txt' , (err,data) =>{
   if (err) throw err;
 
   data = data.toString();
@@ -312,7 +322,7 @@ function readWhitelist(){
 }
 
 function writeWhitelist() {
-  fs.writeFile('Whitelist.txt' , aryWhitelist, (err,data) => {
+  fs.writeFile('./text-files/Whitelist.txt' , aryWhitelist, (err,data) => {
       if(err) throw err;
 
       console.log('whitelist written');
@@ -324,7 +334,7 @@ function writeWhitelist() {
 }
 
 function readChannelIDs(){
-  fs.readFile('ChannelIDs.txt' , (err,data) => {
+  fs.readFile('./text-files/ChannelIDs.txt' , (err,data) => {
   if (err) throw err;
 
   data = data.toString();
@@ -340,7 +350,7 @@ function readChannelIDs(){
 }
 
 function writeChannelIDs() {
-  fs.writeFile('ChannelIDs.txt' , aryChannelIDs, (err,data) => {
+  fs.writeFile('./text-files/ChannelIDs.txt' , aryChannelIDs, (err,data) => {
       if(err) throw err;
       console.log('Channels Written')
       console.log(aryChannelIDs);

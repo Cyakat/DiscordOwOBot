@@ -6,6 +6,7 @@
   "author": "Tiko Bauer",
   "dependencies": {
     "discord.js": "github:discordjs/discord.js",
+    "discord.js-commando": "^0.10.0",
     "winston": "^3.2.1"
   }
 }
