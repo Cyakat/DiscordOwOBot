@@ -382,10 +382,10 @@ function synthDivide(divisorSplit, dividendSplit)
   var expoDividend = [];
   var noXSorList = [];
   var noXDendList = [];
-  var coeffListSor = [];
-  var expoListSor = [];
-  var coeffListDend = [];
-  var expoListDend = [];
+  var coeffListSor = [[],[]];
+  var expoListSor = [[],[]];
+  var coeffListDend = [[],[],[]];
+  var expoListDend = [[],[],[]];
   for(var i = 0; i < divisorSplit.length-1; i++)
   {
     divisorSplit[i] = divisorSplit[i].replace('^', '^e');
@@ -447,64 +447,149 @@ function synthDivide(divisorSplit, dividendSplit)
   noXSorList = expoDivisor;
   noXDendList = expoDividend;
 
-  for(var i = 0; i < expoDivisor[1].length-1; i++)
+  for(var o = 0; o < expoDivisor.length-1; o++)
   {
-    if(expoDivisor[1][i].startsWith('x'))
+    for(var i = 0; i < expoDivisor[o].length-1; i++)
     {
-      noXSorList[1][i] = expoDivisor[1][i].replace('x','1');
+      if(expoDivisor[o][i].startsWith('x'))
+      {
+        noXSorList[o][i] = expoDivisor[o][i].replace('x','1');
+      }
     }
   }
 
-  for(var i = 0; i < expoDividend[1].length-1; i++)
+  for(var o = 0; o < expoDividend.length-1;o++)
   {
-    if(expoDividend[1][i].startsWith('x'))
+    for(var i = 0; i < expoDividend[o].length-1; i++)
     {
-      noXSorList[1][i] = expoDividend[1][i].replace('x','1');
+      if(expoDividend[o][i].startsWith('x'))
+      {
+        noXSorList[o][i] = expoDividend[o][i].replace('x','1');
+      }
     }
   }
 
 
-  for(var i = 0; i < expoDivisor[1].length-1; i++)
+  for(var o = 0; o <= expoDivisor.length-1; o++)
   {
-    noXSorList[1][i] = expoDivisor[1][i].replace(/x/, '');
-  }
-
-  for(var i = 0; i < expoDividend[1].length-1; i++)
-  {
-    noXDendList[1][i] = expoDividend[1][i].replace(/x/, '');
-  }
-  console.log('no x lists');
-  console.log(noXSorList);
-  console.log(noXDendList);
-
-
-  for(var i = 0; noXSorList[1].length-1; i++)
-  {
-    if(!noXSorList[1][i].includes('e'))
+    for(var i = 0; i <= expoDivisor[o].length-1; i++)
     {
-      coeffListSor = noXSorList[i];
+      noXSorList[o][i] = expoDivisor[o][i].replace(/x/, '');
     }
-    else
+
+  }
+
+  for(var o = 0; o <= expoDividend.length-1; o++)
+  {
+    for(var i = 0; i <= expoDividend[o].length-1; i++)
     {
-      expoListSor = noXSorList[i];
+      noXDendList[o][i] = expoDividend[o][i].replace('x', '');
+    }
+    console.log('no x lists');
+    console.log(noXSorList);
+    console.log(noXDendList);
+  }
+
+  console.log('// DEBUG: ')
+  console.log(noXSorList[0][0])
+  console.log(coeffListSor[0][0]);
+
+  for(var o = 0; o <= noXSorList.length-1; o++)
+  {
+    for(var i = 0; i <= noXSorList[o].length-1; i++)
+    {
+      if(!noXSorList[o][i].includes('e'))
+      {
+        console.log('o and is value')
+        console.log(o)
+        console.log(i)
+        console.log(coeffListSor);
+        coeffListSor[o][i] = noXSorList[o][i];
+      }
+      else
+      {
+        expoListSor[o][i-1] = noXSorList[o][i];
+      }
     }
   }
   console.log('Sor lists');
   console.log(coeffListSor);
   console.log(expoListSor);
-  for(var i = o; noXDendList[1].length-1; i++)
+
+  for(var o = 0; o <= noXDendList.length-1; o++)
   {
-    if(!noXDendList[1][i].includes('e'))
+    for(var i = 0; i <= noXDendList[o].length-1; i++)
     {
-      coeffListDend = noXDendList[i];
-    }
-    else
-    {
-      expoListDend = noXDendList[i];
+      if(!noXDendList[o][i].includes('e'))
+      {
+        coeffListDend[o][i] = noXDendList[o][i];
+      }
+      else
+      {
+        expoListDend[o][i-1] = noXDendList[o][i];
+      }
     }
   }
   console.log('Dend lists');
   console.log(coeffListDend);
   console.log(expoListDend);
 
+  for(var o = 0; o < coeffListSor.length; o++)
+  {
+    for(var i = 0; i < coeffListSor[o].length; i++)
+    {
+      coeffListSor[o][i] = parseInt(coeffListSor[o][i]);
+    }
+  }
+
+  for(var o = 0; o < coeffListDend.length; o++)
+  {
+    for(var i = 0; i < coeffListDend[o].length; i++)
+    {
+      coeffListDend[o][i] = parseInt(coeffListDend[o][i]);
+    }
+  }
+  console.log('integer lists');
+  console.log(coeffListSor);
+  console.log(coeffListDend);
+
+  for(var o = 0; o < expoListSor.length; o++)
+  {
+    for(var i = 0; i < expoListSor[o].length; i++)
+    {
+      expoListSor[o][i] = expoListSor[o][i].replace('e','')
+      expoListSor[o][i] = parseInt(expoListSor[o][i]);
+    }
+  }
+
+  for(var o = 0; o < expoListDend.length; o++)
+  {
+    for(var i = 0; i < expoListDend[o].length; i++)
+    {
+      expoListDend[o][i] = expoListDend[o][i].replace('e','')
+      expoListDend[o][i] = parseInt(expoListDend[o][i]);
+    }
+  }
+  console.log('expo int lists');
+  console.log(expoListSor);
+  console.log(expoListDend);
+
+  for(var od = 0; od < coeffListDend.length; od++)
+  {
+    for(var di = 0; di < coeffListDend[od].length; di++)
+    {
+      for(var so = 0; so < coeffListSor.length; so++)
+      {
+        for(var si = 0; si < coeffListSor[so].length; si++)
+        {
+          quotientCoeff = coeffListSor[so][si]/coeffListDend[od][di];
+          if(!quotientCoeff < 1)
+          {
+            var finalQuotient[od] = quotientCoeff;
+          }
+        }
+      }
+    }
+  }
+  console.log(finalQuotient)
 }
