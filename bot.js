@@ -44,10 +44,12 @@ bot.on('message', msg => {
   var userID;
   var args = msg.content;
   var channelRemoved = false;
+  var dividendSplit = [];
+  var divisorSplit = [];
 
-  console.log(aryWhitelist);
+  //console.log(aryWhitelist);
   readWhitelist();
-  console.log(aryWhitelist)
+  //console.log(aryWhitelist)
 
   if (args[0] === prefix) {
     cmd = args.substr(1, args.length-1);
@@ -68,6 +70,8 @@ bot.on('message', msg => {
       cmd = cmd.replace(/<@/g, '');
       cmd = cmd.replace(/>/g, '');
       args2 = cmd.split(' ');
+      console.log(args2);
+      console.log(cmd);
       userID = args2[2];
       console.log(userID);
       addUser(user, userID, msg, aryWhitelist);
@@ -80,10 +84,22 @@ bot.on('message', msg => {
       userID = args2[2];
       removeUser(user, userID, msg, aryWhitelist);
     }
-    if (args2[0] === 'stream')
+    if (args2[0] === 'synth')
     {
-      url = args2[1];
-      fetchVideo(url);
+      var divisor = args2[1];
+      var dividend = args2[2];
+
+      console.log(divisor);
+      console.log(dividend);
+      divisorSplit = divisor.split('+');
+      //divisorSplit = divisor.split('-');
+      console.log(divisorSplit);
+
+      dividendSplit = dividend.split('+');
+      //dividendSplit = dividend.split('-');
+      console.log(dividendSplit);
+
+      synthDivide(divisorSplit, dividendSplit);
     }
   }
   for (i; i<aryChannelIDs.length; i++) {
@@ -315,7 +331,7 @@ function readWhitelist(){
   aryWhitelist = data.split(',');
 
   console.log('Whitelist Loaded');
-  console.log(aryWhitelist);
+  //console.log(aryWhitelist);
   return aryWhitelist;
 
   });
@@ -326,7 +342,7 @@ function writeWhitelist() {
       if(err) throw err;
 
       console.log('whitelist written');
-      console.log(aryWhitelist);
+      //console.log(aryWhitelist);
       readWhitelist();
       indexWhite = aryWhitelist.length-1;
   });
@@ -343,7 +359,7 @@ function readChannelIDs(){
   aryChannelIDs = data.split(',');
 
   console.log('Channels Loaded');
-  console.log(aryChannelIDs);
+  //console.log(aryChannelIDs);
   return aryChannelIDs;
 
   });
@@ -353,9 +369,142 @@ function writeChannelIDs() {
   fs.writeFile('./text-files/ChannelIDs.txt' , aryChannelIDs, (err,data) => {
       if(err) throw err;
       console.log('Channels Written')
-      console.log(aryChannelIDs);
+      //console.log(aryChannelIDs);
       readChannelIDs();
       indexChan = aryChannelIDs.length-1;
   });
   return aryChannelIDs, indexChan;
+}
+
+function synthDivide(divisorSplit, dividendSplit)
+{
+  var expoDivisor = [];
+  var expoDividend = [];
+  var noXSorList = [];
+  var noXDendList = [];
+  var coeffListSor = [];
+  var expoListSor = [];
+  var coeffListDend = [];
+  var expoListDend = [];
+  for(var i = 0; i < divisorSplit.length-1; i++)
+  {
+    divisorSplit[i] = divisorSplit[i].replace('^', '^e');
+  }
+  console.log('split polys');
+  console.log(divisorSplit);
+
+  for(var i = 0; i < dividendSplit.length-1; i++)
+  {
+    dividendSplit[i] = dividendSplit[i].replace('^', '^e');
+  }
+  console.log(dividendSplit);
+
+  for(var i = 0; i < divisorSplit.length-1; i++)
+  {
+    if(divisorSplit[i].includes('x') && !(divisorSplit[i].includes('x^')))
+    {
+      divisorSplit[i] = divisorSplit[i].concat('^e1');
+    }
+  }
+
+  for(var i = 0; i < dividendSplit.length-1; i++)
+  {
+    if(dividendSplit[i].includes('x') && !(dividendSplit[i].includes('x^')))
+    {
+      dividendSplit[i] = dividendSplit[i].concat('^e1');
+    }
+  }
+  console.log('after x^ part')
+  console.log(divisorSplit);
+  console.log(dividendSplit);
+
+  if(!divisorSplit[divisorSplit.length-1].includes('e'))
+  {
+    divisorSplit[divisorSplit.length-1] = divisorSplit[divisorSplit.length-1].concat('x^e0');
+  }
+  console.log('after e0 part');
+  console.log(divisorSplit);
+
+  if(!dividendSplit[dividendSplit.length-1].includes('e'))
+  {
+    dividendSplit[dividendSplit.length-1] = dividendSplit[dividendSplit.length-1].concat('x^e0');
+  }
+  console.log(dividendSplit);
+
+  for(var i = 0; i < divisorSplit.length; i++)
+  {
+    expoDivisor[i] = divisorSplit[i].split('^');
+  }
+
+  for(var i = 0; i < dividendSplit.length; i++)
+  {
+    expoDividend[i] = dividendSplit[i].split('^');
+  }
+  console.log('expo lists');
+  console.log(expoDivisor);
+  console.log(expoDividend);
+
+  noXSorList = expoDivisor;
+  noXDendList = expoDividend;
+
+  for(var i = 0; i < expoDivisor[1].length-1; i++)
+  {
+    if(expoDivisor[1][i].startsWith('x'))
+    {
+      noXSorList[1][i] = expoDivisor[1][i].replace('x','1');
+    }
+  }
+
+  for(var i = 0; i < expoDividend[1].length-1; i++)
+  {
+    if(expoDividend[1][i].startsWith('x'))
+    {
+      noXSorList[1][i] = expoDividend[1][i].replace('x','1');
+    }
+  }
+
+
+  for(var i = 0; i < expoDivisor[1].length-1; i++)
+  {
+    noXSorList[1][i] = expoDivisor[1][i].replace(/x/, '');
+  }
+
+  for(var i = 0; i < expoDividend[1].length-1; i++)
+  {
+    noXDendList[1][i] = expoDividend[1][i].replace(/x/, '');
+  }
+  console.log('no x lists');
+  console.log(noXSorList);
+  console.log(noXDendList);
+
+
+  for(var i = 0; noXSorList[1].length-1; i++)
+  {
+    if(!noXSorList[1][i].includes('e'))
+    {
+      coeffListSor = noXSorList[i];
+    }
+    else
+    {
+      expoListSor = noXSorList[i];
+    }
+  }
+  console.log('Sor lists');
+  console.log(coeffListSor);
+  console.log(expoListSor);
+  for(var i = o; noXDendList[1].length-1; i++)
+  {
+    if(!noXDendList[1][i].includes('e'))
+    {
+      coeffListDend = noXDendList[i];
+    }
+    else
+    {
+      expoListDend = noXDendList[i];
+    }
+  }
+  console.log('Dend lists');
+  console.log(coeffListDend);
+  console.log(expoListDend);
+
 }
